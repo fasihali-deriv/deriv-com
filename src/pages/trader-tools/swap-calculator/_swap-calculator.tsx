@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { ActiveSymbolsResponse } from '@deriv/api-types'
 import { Formik, Field } from 'formik'
 import styled from 'styled-components'
+import { useCountryRule } from '../../../components/hooks/use-country-rule'
 import {
     getSwapChargeSynthetic,
     getSwapChargeForex,
@@ -190,6 +191,7 @@ const SwapCalculator = () => {
     const [activeSymbols, setActiveSymbols] = useState([])
     const [disableDropdown, setDisableDropdown] = useState(true)
     const [symbolSpotPrice, setSymbolSpotPrice] = useState({})
+    const { is_eu, is_row } = useCountryRule()
 
     const onTabClick = (t) => {
         setTab(t)
@@ -226,6 +228,12 @@ const SwapCalculator = () => {
         [symbolSpotPrice],
     )
 
+    const swapRegionalText = {
+        symbol: is_eu ? 'Volatility 200 (1s) Index' : 'Volatility 75 Index',
+        rate: is_eu ? '-20' : '-7.5',
+        charge: is_eu ? '2.22' : '0.83',
+    }
+
     return (
         <>
             <BreadCrumbContainer>
@@ -250,25 +258,27 @@ const SwapCalculator = () => {
                     )}
                 </SectionSubtitle>
 
-                <Flex mt="80px" mb="40px" tablet={{ mt: '40px', mb: '24px' }}>
-                    <SwapTabSelector
-                        active={tab === 'Synthetic'}
-                        onClick={() => onTabClick('Synthetic')}
-                    >
-                        <Text size="var(--text-size-m)" align="center">
-                            {localize('Synthetic')}
-                        </Text>
-                    </SwapTabSelector>
-                    <SwapTabSelector active={tab === 'Real'} onClick={() => onTabClick('Real')}>
-                        <Text size="var(--text-size-m)" align="center">
-                            {localize('Financial')}
-                        </Text>
-                    </SwapTabSelector>
-                </Flex>
+                {is_row && (
+                    <Flex mt="80px" tablet={{ mt: '40px', mb: '24px' }}>
+                        <SwapTabSelector
+                            active={tab === 'Synthetic'}
+                            onClick={() => onTabClick('Synthetic')}
+                        >
+                            <Text size="var(--text-size-m)" align="center">
+                                {localize('Synthetic')}
+                            </Text>
+                        </SwapTabSelector>
+                        <SwapTabSelector active={tab === 'Real'} onClick={() => onTabClick('Real')}>
+                            <Text size="var(--text-size-m)" align="center">
+                                {localize('Financial')}
+                            </Text>
+                        </SwapTabSelector>
+                    </Flex>
+                )}
 
                 {tab === 'Synthetic' ? (
                     <>
-                        <ContentContainer mb="4.0rem">
+                        <ContentContainer mb="4.0rem" mt="40px">
                             <SwapFormWrapper>
                                 <Formik
                                     enableReinitialize
@@ -459,10 +469,9 @@ const SwapCalculator = () => {
                                     >
                                         <Text mb="2rem">
                                             {localize(
-                                                'Let’s say you want to keep 0.01 lots of Volatility 75 Index with an asset price of 400,000 USD and swap rate of -7.5 open for one night.',
+                                                `Let’s say you want to keep 0.01 lots of ${swapRegionalText?.symbol} with an asset price of 400,000 USD and swap rate of ${swapRegionalText?.rate} open for one night.`,
                                             )}
                                         </Text>
-
                                         <Desktop>
                                             <SwapSyntheticExample />
                                         </Desktop>
@@ -482,11 +491,27 @@ const SwapCalculator = () => {
                                                     </span>
                                                 </li>
                                             </StyledOl>
+                                            {is_eu && (
+                                                <>
+                                                    <Text mt="1.6rem" size="10px">
+                                                        <Localize
+                                                            translate_text="*All assets have the same contract size, with one standard lot being equal to 1 unit, except for forex."
+                                                            components={[<strong key={0} />]}
+                                                        />
+                                                    </Text>
+                                                    <Text mt="1.6rem" size="10px">
+                                                        <Localize
+                                                            translate_text="One standard lot of forex = 100,000 units"
+                                                            components={[<strong key={0} />]}
+                                                        />
+                                                    </Text>
+                                                </>
+                                            )}
                                         </FormulaText>
 
                                         <Text mt="1.6rem">
                                             <Localize
-                                                translate_text="So you will require a swap charge of <0>0.83 USD</0> to keep the position open for one night."
+                                                translate_text={`So you will require a swap charge of <0>${swapRegionalText?.charge} USD</0> to keep the position open for one night.`}
                                                 components={[<strong key={0} />]}
                                             />
                                         </Text>
@@ -516,7 +541,7 @@ const SwapCalculator = () => {
                     </>
                 ) : (
                     <>
-                        <ContentContainer mb="2.0rem">
+                        <ContentContainer mb="2.0rem" mt="40px">
                             <SwapFormWrapper>
                                 <Formik
                                     enableReinitialize

@@ -25,8 +25,15 @@ import {
 } from '../common/_style'
 import { Localize } from 'components/localization'
 import { Desktop, Mobile } from 'components/containers'
+import { useCountryRule } from 'components/hooks/use-country-rule'
 
 export const SwapSyntheticExample = () => {
+    const { is_eu, is_row } = useCountryRule()
+    const swapCalcValues = {
+        swapRate: is_eu ? '-20' : '-7.5',
+        swapCharge: is_eu ? '-2.22' : '-0.83',
+    }
+
     return (
         <>
             <Desktop>
@@ -79,7 +86,7 @@ export const SwapSyntheticExample = () => {
                         </FormulaValueSwapSynthetic>
 
                         <FormulaValueSwapSynthetic>
-                            <Localize translate_text="( -7.5 " />
+                            <Localize translate_text={`( ${swapCalcValues?.swapRate}`} />
                             <PointerContainer top ml="-15px" width="100px">
                                 <PointerDot />
                                 <PointerStick height="34px" />
@@ -112,7 +119,7 @@ export const SwapSyntheticExample = () => {
 
                         <FormulaValueSwapSynthetic>
                             <Localize
-                                translate_text="<0>-0.83</0>"
+                                translate_text={`<0>${swapCalcValues?.swapCharge}</0>`}
                                 components={[<FormulaGreen key={0} />]}
                             />
                             <PointerContainer ml="-25px" width="100px">
@@ -178,7 +185,7 @@ export const SwapSyntheticExample = () => {
                             </FormulaValueSwapMobile>
 
                             <FormulaValueMobile>
-                                <Localize translate_text="( -7.5 " />
+                                <Localize translate_text={`( ${swapCalcValues?.swapRate}`} />
                                 <PointerContainerMobile top ml="-13px" mw="0" height="70px">
                                     <PointerDotMobile />
                                     <PointerStickMobile height="28px" />
@@ -212,7 +219,7 @@ export const SwapSyntheticExample = () => {
 
                             <FormulaValueMobile>
                                 <Localize
-                                    translate_text="<0> -0.83</0>"
+                                    translate_text={`<0>${swapCalcValues?.swapCharge}</0>`}
                                     components={[<FormulaGreen key={0} />]}
                                 />
                                 <PointerContainerMobile ml="-20px" mw="0">

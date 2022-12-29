@@ -99,6 +99,9 @@ const query = graphql`
         swap: file(relativePath: { eq: "trade-tools/landing/swap-calculator.png" }) {
             ...fadeIn
         }
+        swap_eu: file(relativePath: { eq: "trade-tools/landing/swap-calculator-eu.png" }) {
+            ...fadeIn
+        }
         pip: file(relativePath: { eq: "trade-tools/landing/pip-calculator.png" }) {
             ...fadeIn
         }
@@ -114,6 +117,11 @@ const query = graphql`
             ...fadeIn
         }
         swap_mobile: file(relativePath: { eq: "trade-tools/landing/swap-calculator-mobile.png" }) {
+            ...fadeIn
+        }
+        swap_eu_mobile: file(
+            relativePath: { eq: "trade-tools/landing/swap-calculator-mobile-eu.png" }
+        ) {
             ...fadeIn
         }
         pip_mobile: file(relativePath: { eq: "trade-tools/landing/pip-calculator-mobile.png" }) {
