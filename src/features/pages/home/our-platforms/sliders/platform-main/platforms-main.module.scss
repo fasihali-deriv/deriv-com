@@ -10,10 +10,15 @@
 .platform_swiper {
     inline-size: 35rem;
     margin: 0;
+    overflow: hidden;
     @include breakpoints(tablet) {
         min-block-size: 60rem;
         inline-size: 37rem;
     }
+}
+.embla_slider{
+    flex: 0 0 100%;
+    min-width: 0;
 }
 
 .main_item {

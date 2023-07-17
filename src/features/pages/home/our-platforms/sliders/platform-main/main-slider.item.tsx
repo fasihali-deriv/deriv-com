@@ -11,21 +11,18 @@ import Image from 'features/components/atoms/image'
 
 interface MainSliderItemProps {
     item: PlatformItem
+    onClick: () => void
 }
-const MainSliderItem = ({ item }: MainSliderItemProps) => {
-    const swiperSlide = useSwiperSlide()
+const MainSliderItem = ({ item, onClick }: MainSliderItemProps) => {
+    // const swiperSlide = useSwiperSlide()
 
     return (
-        <div
-            className={dclsx(main_item, {
-                [main_item_active]: swiperSlide.isActive,
-            })}
-        >
+        <div className={dclsx(main_item, {})} onClick={onClick}>
             <Image src={item.icon} width={40} height={40} />
             <Typography.Heading as="h3" size="xxs">
                 <Localize translate_text={item.title} />
             </Typography.Heading>
-            {swiperSlide.isActive && (
+            {/* {swiperSlide.isActive && (
                 <Flex.Box
                     direction="col"
                     justify="between"
@@ -40,7 +37,7 @@ const MainSliderItem = ({ item }: MainSliderItemProps) => {
                         <Localize translate_text="_t_Learn more >_t_" />
                     </Link>
                 </Flex.Box>
-            )}
+            )} */}
         </div>
     )
 }
